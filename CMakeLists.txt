@@ -18,26 +18,41 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
 # Core MCU flags, CPU type, instruction set and FPU setup
-set(cpu_PARAMS 
+set(cpu_PARAMS
     # Other parameters
     # -mthumb
     # -mcpu, -mfloat, -mfloat-abi, ...
 )
 
 # Sources
-file(GLOB core_sources ${CMAKE_CURRENT_SOURCE_DIR}/Core/Src/**.cpp ${CMAKE_CURRENT_SOURCE_DIR}/Core/Src/**.c)
+file(GLOB_RECURSE core_sources
+  ${CMAKE_CURRENT_SOURCE_DIR}/Core/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/Core/*.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/CMSIS/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/CMSIS/*.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/STM32/*.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/STM32/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/Modules/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/Modules/*.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/*.c
+)
 
 set(sources_SRCS ${core_sources})
 
 # Include directories for all compilers
 set(include_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMSIS/Inc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/CMSIS/Inc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/STM32/Inc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Inc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Inc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Inc/Registers
 )
 
 # Include directories for each compiler

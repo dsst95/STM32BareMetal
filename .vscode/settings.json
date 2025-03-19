@@ -25,4 +25,10 @@
   "C_Cpp.inlayHints.referenceOperator.showSpace": false,
   "C_Cpp.codeAnalysis.clangTidy.enabled": true,
   "C_Cpp.formatting": "clangFormat",
+  "files.associations": {
+    "cstdint": "cpp",
+    "cstddef": "cpp",
+    "cinttypes": "cpp",
+    "cstdio": "cpp"
+  },
 }

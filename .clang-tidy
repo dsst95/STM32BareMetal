@@ -1,7 +1,6 @@
 Checks: >
   -*,
   abseil-*,
-  altera-*,
   boost-*,
   bugprone-*,
   cert-*,
@@ -18,10 +17,11 @@ Checks: >
   performance-*,
   portability-*,
   readability-*,
+  -llvm-header-guard,
   -modernize-use-trailing-return-type
 
 WarningsAsErrors: "*"
-HeaderFileExtensions:         ['', 'h','hh','hpp','hxx']
+HeaderFileExtensions:         ['','h','hh','hpp','hxx']
 ImplementationFileExtensions: ['c','cc','cpp','cxx']
 CheckOptions:
   - { key: readability-function-cognitive-complexity.Threshold,          value: 15 }
