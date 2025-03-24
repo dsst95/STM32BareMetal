@@ -53,6 +53,7 @@ set(include_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Inc
   ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Inc
   ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Inc/Registers
+  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Inc/Registers/RCC
 )
 
 # Include directories for each compiler
@@ -67,7 +68,9 @@ set(symbols_SYMB
 
 # Symbols definition for each compiler
 set(symbols_c_SYMB)
-set(symbols_cxx_SYMB)
+set(symbols_cxx_SYMB
+  _LIBCPP_HAS_NO_THREADS
+)
 set(symbols_asm_SYMB)
 
 # Link directories and names of libraries
