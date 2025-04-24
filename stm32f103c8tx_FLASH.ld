@@ -181,6 +181,11 @@ SECTIONS
     libc.a ( * )
     libm.a ( * )
     libgcc.a ( * )
+    /* The finalizers are never invoked when the target shuts down and ergo
+    * can be discarded. These include C++ global static destructors and C
+    * designated finalizers. */
+    *(.fini_array);
+    *(.fini);
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }

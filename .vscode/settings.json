@@ -17,7 +17,7 @@
   "C_Cpp.autocompleteAddParentheses": true,
   "C_Cpp.default.cppStandard": "c++23",
   "C_Cpp.default.cStandard": "c23",
-  "C_Cpp.default.intelliSenseMode": "linux-gcc-arm",
+  "C_Cpp.default.intelliSenseMode": "gcc-arm",
   "C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
   "C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
   "C_Cpp.inlayHints.parameterNames.enabled": true,
@@ -26,9 +26,12 @@
   "C_Cpp.codeAnalysis.clangTidy.enabled": true,
   "C_Cpp.formatting": "clangFormat",
   "files.associations": {
-    "cstdint": "cpp",
+    "stm32f103xb.h": "c",
     "cstddef": "cpp",
-    "cinttypes": "cpp",
-    "cstdio": "cpp"
+    "type_traits": "cpp",
+    "cstdint": "cpp",
+    "compare": "cpp",
+    "array": "cpp",
+    "vector": "cpp"
   },
 }

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.28)
 
 #
 # User is free to modify the file as much as necessary
@@ -33,14 +33,9 @@ set(cpu_PARAMS
 file(GLOB_RECURSE core_sources
   ${CMAKE_CURRENT_SOURCE_DIR}/Core/*.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/Core/*.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/CMSIS/*.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/CMSIS/*.c
   ${CMAKE_CURRENT_SOURCE_DIR}/Libs/STM32/*.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/Libs/STM32/*.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/Modules/*.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/Modules/*.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/*.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/*.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/Startup/*.s
 )
 
 set(sources_SRCS ${core_sources})
@@ -50,10 +45,7 @@ set(include_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc
   ${CMAKE_CURRENT_SOURCE_DIR}/Libs/CMSIS/Inc
   ${CMAKE_CURRENT_SOURCE_DIR}/Libs/STM32/Inc
-  ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Inc
-  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Inc
-  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Inc/Registers
-  ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Inc/Registers/RCC
+  ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Peripherals/Inc
 )
 
 # Include directories for each compiler
@@ -137,6 +129,16 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
     $<$<COMPILE_LANGUAGE:C>: >
     $<$<COMPILE_LANGUAGE:CXX>:
 
+    -fno-exceptions
+    -fno-rtti
+    -fno-unwind-tables
+    -fno-threadsafe-statics
+    -fstack-usage
+    -fno-math-errno
+    -ffunction-sections
+    -fdata-sections
+    -fno-use-cxa-atexit
+
     # -Wno-volatile
     # -Wold-style-cast
     # -Wuseless-cast
@@ -144,7 +146,7 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
     >
     $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp -MMD -MP>
     $<$<CONFIG:Debug>:-Og -g3 -ggdb>
-    $<$<CONFIG:Release>:-Og -g0>
+    $<$<CONFIG:Release>:-O3>
 )
 
 # Linker options
@@ -153,6 +155,7 @@ target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
     ${cpu_PARAMS}
     ${linker_OPTS}
     -Wl,-Map=${CMAKE_PROJECT_NAME}.map
+    -Wl,--gc-sections # Remove unused sections
     -u _printf_float # STDIO float formatting support (remove if not used)
     --specs=nosys.specs
     -Wl,--start-group
@@ -163,6 +166,9 @@ target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
     -Wl,--end-group
     -Wl,-z,max-page-size=8 # Allow good software remapping across address space (with proper GCC section making)
     -Wl,--print-memory-usage
+    -Wl,--wrap=atexit
+    -Wl,--wrap=at_quick_exit
+    -Wl,--wrap=__cxa_atexit
 )
 
 # Execute post-build to print size, generate hex and bin

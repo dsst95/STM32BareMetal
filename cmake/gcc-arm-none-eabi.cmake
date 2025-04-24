@@ -23,5 +23,5 @@ set(CMAKE_EXECUTABLE_SUFFIX_CXX     ".elf")
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
-set(CMAKE_C_CLANG_TIDY clang-tidy -allow-no-checks -extra-arg=--target=arm-none-eabi)
-set(CMAKE_CXX_CLANG_TIDY clang-tidy -allow-no-checks -extra-arg=--target=arm-none-eabi)
+#set(CMAKE_C_CLANG_TIDY clang-tidy -allow-no-checks -extra-arg=--target=arm-none-eabi)
+#set(CMAKE_CXX_CLANG_TIDY clang-tidy -allow-no-checks -extra-arg=--target=arm-none-eabi)
