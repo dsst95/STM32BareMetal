@@ -57,5 +57,5 @@ foreach(DIR ${ARM_NONE_EABI_INC_DIRS_LIST})
   endif()
 endforeach()
 
-set(CMAKE_C_CLANG_TIDY clang-tidy -extra-arg=--target=arm-none-eabi ${CLANG_EXTRA_INCLUDES})
-set(CMAKE_CXX_CLANG_TIDY clang-tidy -extra-arg=--target=arm-none-eabi ${CXX_CLANG_EXTRA_INCLUDES})
+set(CMAKE_C_CLANG_TIDY clang-tidy --allow-no-checks -extra-arg=--target=arm-none-eabi ${CLANG_EXTRA_INCLUDES})
+set(CMAKE_CXX_CLANG_TIDY clang-tidy --allow-no-checks -extra-arg=--target=arm-none-eabi ${CXX_CLANG_EXTRA_INCLUDES})
