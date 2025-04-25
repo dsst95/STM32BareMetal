@@ -22,10 +22,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: arm-none-eabi-gcc
-      uses: ryanwinter/arm-none-eabi-gcc@master
+    - name: Install toolchain
+      uses: carlosperate/arm-none-eabi-gcc-action@v1
       with:
-        release: '10-2021.10'
+        release: '13.3.Rel1'
 
     - name: Install Ninja
       uses: seanmiddleditch/gha-setup-ninja@v3
