@@ -15,28 +15,53 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <span>
 #include <utility>
-#include <vector>
 
 namespace Peripherals::Usart
 {
-  using RccType = Peripherals::Rcc::ResetAndClockControl;
+  enum class UsartInstance : uint8_t
+  {
+    Usart1 = 0,
+    Usart2 = 1,
+    Usart3 = 2,
+  };
 
   /// @brief
   class UniversalSynchronousAsynchronousReceiverTransmitter
   {
    private:
     USART_TypeDef* peripheral;
-    const RccType& rcc;
-    const size_t mantissa;
-    const size_t fraction;
+    size_t mantissa;
+    size_t fraction;
+
+    UniversalSynchronousAsynchronousReceiverTransmitter() = default;
+
+    void ConfigureClocks() const;
+    void ConfigureUsart() const;
 
    public:
     /// @brief
-    UniversalSynchronousAsynchronousReceiverTransmitter(
-      USART_TypeDef* peripheral, const RccType& rcc, const std::pair<size_t, size_t> mantissaFraction)
-      : peripheral {peripheral}, rcc {rcc}, mantissa {mantissaFraction.first}, fraction {mantissaFraction.second}
+    // UniversalSynchronousAsynchronousReceiverTransmitter(
+    //   USART_TypeDef* peripheral, const std::pair<size_t, size_t> mantissaFraction)
+    //   : peripheral {peripheral}, mantissa {mantissaFraction.first}, fraction {mantissaFraction.second}
+    // {
+    //   ConfigureClocks();
+    //   ConfigureUsart();
+    // }
+    template<UsartInstance Instance>
+    static UniversalSynchronousAsynchronousReceiverTransmitter& GetInstance()
     {
+      static UniversalSynchronousAsynchronousReceiverTransmitter instance;
+      return instance;
+    }
+
+    void Configure(USART_TypeDef* peripheral, const std::pair<size_t, size_t> mantissaFraction)
+    {
+      this->peripheral = peripheral;
+      this->mantissa = mantissaFraction.first;
+      this->fraction = mantissaFraction.second;
+
       ConfigureClocks();
       ConfigureUsart();
     }
@@ -67,12 +92,8 @@ namespace Peripherals::Usart
     /// @param data
     /// @param timeout
     /// @return
-    Peripherals::Status Transmit(const std::vector<size_t>& data, const size_t timeout) const;
-
-   private:
-    void ConfigureClocks() const;
-
-    void ConfigureUsart() const;
+    template<class T, std::size_t N>
+    Peripherals::Status Transmit(const std::span<T, N>& data, const size_t timeout) const;
   };
 }  // namespace Peripherals::Usart
 

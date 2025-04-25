@@ -12,15 +12,16 @@
 #include <Usart.hpp>
 #include <cmath>
 #include <cstdint>
+#include <span>
 #include <utility>
-#include <vector>
 
 using RccType = Peripherals::Rcc::ResetAndClockControl;
 using UsartType = Peripherals::Usart::UniversalSynchronousAsynchronousReceiverTransmitter;
 
-Peripherals::Status UsartType::Transmit(const std::vector<size_t>& data, const size_t timeout) const
+template<class T, std::size_t N>
+Peripherals::Status UsartType::Transmit(const std::span<T, N>& data, const size_t timeout) const
 {
-  const auto start = rcc.GetSysTick();
+  const auto start = RccType::GetInstance().GetSysTick();
   auto iter = data.begin();
 
   while (iter != data.end())
@@ -35,7 +36,7 @@ Peripherals::Status UsartType::Transmit(const std::vector<size_t>& data, const s
       peripheral->DR = *iter;
       ++iter;
     }
-    else if ((rcc.GetSysTick() - start) >= timeout)
+    else if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
     {
       return Peripherals::Status::Timeout;
     }
@@ -53,7 +54,7 @@ Peripherals::Status UsartType::Transmit(const std::vector<size_t>& data, const s
       return Peripherals::Status::Ok;
     }
 
-    if ((rcc.GetSysTick() - start) >= timeout)
+    if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
     {
       return Peripherals::Status::Timeout;
     }
@@ -62,8 +63,6 @@ Peripherals::Status UsartType::Transmit(const std::vector<size_t>& data, const s
 
 void UsartType::ConfigureUsart() const
 {
-  // NOLINTBEGIN(cppcoreguidelines-pro-type-cstyle-cast)
-
   // Enable transmitter
   peripheral->CR1 |= USART_CR1_TE;
 
@@ -99,13 +98,10 @@ void UsartType::ConfigureUsart() const
 
   // Enable UART
   peripheral->CR1 |= USART_CR1_UE;
-
-  // NOLINTEND(cppcoreguidelines-pro-type-cstyle-cast)
 }
 
 void UsartType::ConfigureClocks() const
 {
-  // NOLINTBEGIN(cppcoreguidelines-pro-type-cstyle-cast)
   if (peripheral == USART1)
   {
     // Enable Port A clock
@@ -117,5 +113,4 @@ void UsartType::ConfigureClocks() const
     GPIOA->CRH |= (GPIO_CRH_CNF10_0);
     AFIO->MAPR &= ~AFIO_MAPR_USART1_REMAP;
   }
-  // NOLINTEND(cppcoreguidelines-pro-type-cstyle-cast)
 }

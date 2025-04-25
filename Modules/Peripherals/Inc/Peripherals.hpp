@@ -8,7 +8,6 @@
 #ifndef INC_PERIPHERALS_HPP
 #define INC_PERIPHERALS_HPP
 
-//#include <cstddef>
 #include <cstdint>
 
 namespace Peripherals

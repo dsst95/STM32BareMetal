@@ -9,24 +9,32 @@
 #include <InterruptManager.hpp>
 #include <Rcc.hpp>
 #include <Usart.hpp>
+#include <cstdio>
+
+namespace Usart = Peripherals::Usart;
 
 using RccType = Peripherals::Rcc::ResetAndClockControl;
 using InterruptManagerType = Peripherals::InterruptManager;
-using UsartType = Peripherals::Usart::UniversalSynchronousAsynchronousReceiverTransmitter;
+using UsartType = Usart::UniversalSynchronousAsynchronousReceiverTransmitter;
+
+constexpr auto BaudRate = 115200;
+constexpr auto Delay = 1000;
 
 int main()
 {
-  auto rcc = RccType();
+  // Get instance to configure RCC
+  RccType::GetInstance();
 
   InterruptManagerType::SetupNvicPriorities();
-  // InterruptManagerType::RegisterInterruptHandler(SysTick_IRQn, &rcc);
 
-  auto usart1 = UsartType(USART1, rcc, UsartType::GetMantissaAndFraction(115200, rcc.Ticks));
+  UsartType::GetInstance<Usart::UsartInstance::Usart1>().Configure(
+    USART1, UsartType::GetMantissaAndFraction(BaudRate, RccType::Ticks));
 
   /* Loop forever */
   for (;;)
   {
-    rcc.Delay(1000);
+    RccType::GetInstance().Delay(Delay);
+    printf("Hello World!\n");
   }
 
   return 0;

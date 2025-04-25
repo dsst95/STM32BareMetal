@@ -8,12 +8,14 @@
 #include <stm32f1xx.h>
 
 #include <InterruptManager.hpp>
+#include <Rcc.hpp>
 
 using InterruptManagerType = Peripherals::InterruptManager;
+using RccType = Peripherals::Rcc::ResetAndClockControl;
 
 // NOLINTBEGIN
 extern "C" void SysTick_Handler()
 {
-  // InterruptManagerType::ExecuteInterruptHandler(IRQn_Type::SysTick_IRQn);
+  RccType::GetInstance().HandleInterrupt();
 }
 // NOLINTEND

@@ -11,8 +11,6 @@
 
 #include <stm32f1xx.h>
 
-#include <InterruptHandler.hpp>
-
 namespace Peripherals::Rcc
 {
   /// @brief Class to manage the Reset and Clock Control (RCC).
@@ -23,57 +21,10 @@ namespace Peripherals::Rcc
     uint32_t sysTick;
 
     /// @brief Configures the system clocks.
-    inline static void ConfigureClocks()
-    {
-      // NOLINTBEGIN(cppcoreguidelines-pro-type-cstyle-cast)
-      RCC->CFGR &= ~RCC_CFGR_PLLMULL;
-      RCC->CFGR |= RCC_CFGR_PLLMULL9;
-      RCC->CFGR &= ~RCC_CFGR_USBPRE;
-
-      RCC->CR |= RCC_CR_HSEON;
-      while ((RCC->CR & RCC_CR_HSERDY) == 0)
-      {
-      }
-
-      RCC->CFGR |= RCC_CFGR_PLLSRC;
-
-      RCC->CR |= RCC_CR_PLLON;
-      while ((RCC->CR & RCC_CR_PLLRDY) == 0)
-      {
-      }
-
-      FLASH->ACR &= ~FLASH_ACR_LATENCY;
-      FLASH->ACR |= FLASH_ACR_LATENCY_1;
-      FLASH->ACR |= FLASH_ACR_PRFTBE;
-
-      RCC->CFGR &= ~RCC_CFGR_SW;
-      RCC->CFGR |= RCC_CFGR_SW_PLL;
-      while ((RCC->CFGR & RCC_CFGR_SWS) == 0)
-      {
-      }
-
-      RCC->CFGR &= ~RCC_CFGR_HPRE;
-      RCC->CFGR &= ~RCC_CFGR_PPRE1;
-      RCC->CFGR |= RCC_CFGR_PPRE1_2;
-      RCC->CFGR &= ~RCC_CFGR_PPRE2;
-      RCC->CFGR &= ~RCC_CFGR_ADCPRE;
-      RCC->CFGR |= RCC_CFGR_ADCPRE_1;
-
-      // NOLINTEND(cppcoreguidelines-pro-type-cstyle-cast)
-    }
+    static void ConfigureClocks();
 
     /// @brief Configures the SysTick timer.
-    inline static void ConfigureSysTick()
-    {
-      SysTick->CTRL = 0x00UL;
-      SysTick->LOAD = Ticks - 1;
-      SysTick->VAL = 0x00UL;
-      SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_CLKSOURCE_Msk;
-    }
-
-   public:
-    /// @brief Number of ticks per millisecond.
-    static constexpr uint32_t Ticks = 72000;
+    static void ConfigureSysTick();
 
     /// @brief Constructor for the ResetAndClockControl class.
     /// @details Configures the system clocks and the SysTickTimer.
@@ -81,6 +32,16 @@ namespace Peripherals::Rcc
     {
       ConfigureClocks();
       ConfigureSysTick();
+    }
+
+    public:
+    /// @brief Number of ticks per millisecond.
+    static constexpr uint32_t Ticks = 72000;
+
+    static ResetAndClockControl& GetInstance()
+    {
+      static ResetAndClockControl instance;
+      return instance;
     }
 
     ResetAndClockControl(const ResetAndClockControl&) = delete;
@@ -107,10 +68,10 @@ namespace Peripherals::Rcc
       return sysTick;
     }
 
-    // inline void HandleInterrupt() override
-    // {
-    //   ++sysTick;
-    // }
+    inline void HandleInterrupt()
+    {
+      ++sysTick;
+    }
   };
 }  // namespace Peripherals::Rcc
 

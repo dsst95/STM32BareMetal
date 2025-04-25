@@ -4,13 +4,20 @@
 /// @version 1.0
 /// @brief
 
+#include <Usart.hpp>
+#include <span>
+
+namespace Usart = Peripherals::Usart;
+
+using UsartType = Usart::UniversalSynchronousAsynchronousReceiverTransmitter;
+
+constexpr auto PrintTimeout = 1000;
+
+// NOLINTBEGIN
 extern "C" int _write(int file, const char *ptr, int len)
 {
-  // std::vector<char *> data(ptr, len);
-
-  // char* foo;
-  // auto vec = std::vector(foo, len);
-  // Main::usart1->Transmit(, Core::Timeout);
+  UsartType::GetInstance<Usart::UsartInstance::Usart1>().Transmit(std::span(ptr, len), PrintTimeout);
 
   return len;
 }
+// NOLINTEND
