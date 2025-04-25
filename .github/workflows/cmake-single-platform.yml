@@ -22,14 +22,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install toolchain
+    - name: Install GNU ARM Toolchain
       uses: carlosperate/arm-none-eabi-gcc-action@v1
       with:
         release: '13.3.Rel1'
 
+    - name: Install LLVM Embedded Toolchain for Arm
+      uses: stellar-aria/llvm-embedded-toolchain-for-arm-action@latest
+
     - name: Install Ninja
       uses: seanmiddleditch/gha-setup-ninja@v3
-    
+      
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
