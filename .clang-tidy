@@ -20,7 +20,11 @@ Checks: >
   -llvm-header-guard,
   -modernize-use-trailing-return-type,
   -misc-include-cleaner,
-  -readability-static-accessed-through-instance
+  -readability-static-accessed-through-instance,
+  -cppcoreguidelines-pro-type-cstyle-cast,
+  -modernize-use-std-print,
+  -cppcoreguidelines-pro-type-vararg,
+  -hicpp-vararg
 
 WarningsAsErrors: "*"
 HeaderFileExtensions:         ['','h','hh','hpp','hxx']

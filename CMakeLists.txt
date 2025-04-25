@@ -42,7 +42,6 @@ set(sources_SRCS ${core_sources})
 
 # Include directories for all compilers
 set(include_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc
   ${CMAKE_CURRENT_SOURCE_DIR}/Libs/CMSIS/Inc
   ${CMAKE_CURRENT_SOURCE_DIR}/Libs/STM32/Inc
   ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Peripherals/Inc
