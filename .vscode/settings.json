@@ -23,7 +23,6 @@
   "C_Cpp.inlayHints.parameterNames.enabled": true,
   "C_Cpp.inlayHints.referenceOperator.enabled": true,
   "C_Cpp.inlayHints.referenceOperator.showSpace": false,
-  "C_Cpp.codeAnalysis.clangTidy.enabled": true,
   "C_Cpp.formatting": "clangFormat",
   "files.associations": {
     "stm32f103xb.h": "c",

@@ -2,8 +2,7 @@
 /// @author Dennis Stumm
 /// @date 2025
 /// @version 1.0
-/// @brief
-/// @details
+/// @brief Interrupt manager to configure the interrupts.
 
 #ifndef PERIPHERALS_INC_INTERRUPTMANAGER_HPP
 #define PERIPHERALS_INC_INTERRUPTMANAGER_HPP
@@ -14,10 +13,11 @@
 
 namespace Peripherals
 {
-  /// @brief
+  /// @brief Interrupt manager to configure the interrupts.
   class InterruptManager
   {
    public:
+    // Delete not needed constructors and destructors
     constexpr InterruptManager() = delete;
     InterruptManager(const InterruptManager&) = delete;
     InterruptManager& operator=(const InterruptManager&) = delete;
@@ -25,6 +25,7 @@ namespace Peripherals
     InterruptManager& operator=(InterruptManager&&) = delete;
     virtual ~InterruptManager() = delete;
 
+    /// @brief Configures the NVIC priorities for the used interrupts.
     static void SetupNvicPriorities()
     {
       NVIC_SetPriority(IRQn_Type::SysTick_IRQn, 0);

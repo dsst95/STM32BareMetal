@@ -1,3 +1,9 @@
+/// @file NoopAtexit.cpp
+/// @author Dennis Stumm
+/// @date 2025
+/// @version 1.0
+/// @brief File to remove the standard exit functions from RAM, to save some memory.
+
 // NOLINTBEGIN
 // These two are defined by <cstdlib>.
 extern "C" int __wrap_atexit(void (*)(void)) { return 0; }

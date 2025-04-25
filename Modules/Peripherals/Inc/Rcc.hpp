@@ -38,12 +38,15 @@ namespace Peripherals::Rcc
     /// @brief Number of ticks per millisecond.
     static constexpr uint32_t Ticks = 72000;
 
+    /// @brief Returns the singleton instance of the ResetAndClockControl class.
+    /// @return Reference to the singleton instance.
     static ResetAndClockControl& GetInstance()
     {
       static ResetAndClockControl instance;
       return instance;
     }
 
+    // Deleted copy constructor and assignment operator.
     ResetAndClockControl(const ResetAndClockControl&) = delete;
     ResetAndClockControl& operator=(const ResetAndClockControl&) = delete;
     ResetAndClockControl(ResetAndClockControl&&) = delete;
@@ -68,6 +71,7 @@ namespace Peripherals::Rcc
       return sysTick;
     }
 
+    /// @brief Handles the SysTick interrupt.
     inline void HandleInterrupt()
     {
       ++sysTick;

@@ -2,8 +2,7 @@
 /// @author Dennis Stumm
 /// @date 2025
 /// @version 1.0
-/// @brief Core header file of the STM32 bare metal tutorial project, containing base enums and constants for
-///        peripherals.
+/// @brief Core peripherals header file, containing base enums and constants for peripherals.
 
 #ifndef INC_PERIPHERALS_HPP
 #define INC_PERIPHERALS_HPP

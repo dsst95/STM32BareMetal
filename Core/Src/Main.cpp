@@ -1,4 +1,4 @@
-/// @file main.cpp
+/// @file Main.cpp
 /// @author Dennis Stumm
 /// @date 2025
 /// @version 1.0
@@ -22,10 +22,10 @@ constexpr auto Delay = 1000;
 
 int main()
 {
+  InterruptManagerType::SetupNvicPriorities();
+
   // Get instance to configure RCC
   RccType::GetInstance();
-
-  InterruptManagerType::SetupNvicPriorities();
 
   UsartType::GetInstance<Usart::UsartInstance::Usart1>().Configure(
     USART1, UsartType::GetMantissaAndFraction(BaudRate, RccType::Ticks));

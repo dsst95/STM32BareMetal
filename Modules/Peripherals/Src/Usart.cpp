@@ -2,8 +2,7 @@
 /// @author Dennis Stumm
 /// @date 2025
 /// @version 1.0
-/// @brief
-/// @details
+/// @brief USART implementation file.
 
 #include <stm32f1xx.h>
 
@@ -24,6 +23,7 @@ Peripherals::Status UsartType::Transmit(const std::span<T, N>& data, const size_
   const auto start = RccType::GetInstance().GetSysTick();
   auto iter = data.begin();
 
+  // Send data until the end of the span or timeout is reached
   while (iter != data.end())
   {
     if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
@@ -42,6 +42,7 @@ Peripherals::Status UsartType::Transmit(const std::span<T, N>& data, const size_
     }
   }
 
+  // Wait for transmission to complete
   while (true)
   {
     if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
