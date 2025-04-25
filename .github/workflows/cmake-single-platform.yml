@@ -29,6 +29,7 @@ jobs:
 
     - name: Install LLVM Embedded Toolchain for Arm
       uses: stellar-aria/llvm-embedded-toolchain-for-arm-action@latest
+      run: clang-tidy --version
 
     - name: Install Ninja
       uses: seanmiddleditch/gha-setup-ninja@v3
