@@ -27,8 +27,8 @@ jobs:
       with:
         release: '13.3.Rel1'
 
-    - name: Install LLVM Embedded Toolchain for Arm
-      uses: stellar-aria/llvm-embedded-toolchain-for-arm-action@latest
+    - name: Install LLVM and Clang
+      uses: KyleMayes/install-llvm-action@v2
 
     - name: Install Ninja
       uses: seanmiddleditch/gha-setup-ninja@v3
