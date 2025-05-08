@@ -28,7 +28,7 @@ jobs:
         release: '13.3.Rel1'
 
     - name: Install LLVM and Clang
-      uses: KyleMayes/install-llvm-action@v2.0.6
+      uses: KyleMayes/install-llvm-action@v2
       with:
         version: '20.1.4'
 
