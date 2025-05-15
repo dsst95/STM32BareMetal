@@ -44,6 +44,10 @@ jobs:
       with:
         version: '20.1.4'
 
+    - name: Link clang++ version specific
+      run: ln -s clang++-20 clang++
+      working-directory: ${{github.workspace}}/llvm/bin
+
     - name: Install Ninja
       uses: seanmiddleditch/gha-setup-ninja@v3
 
