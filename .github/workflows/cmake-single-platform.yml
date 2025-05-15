@@ -25,6 +25,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Cache node modules
+      uses: actions/cache@v4
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: |
+          ${{github.workspace}}/llvm
+        key: toolchains
+
     - name: Install GNU ARM Toolchain
       uses: carlosperate/arm-none-eabi-gcc-action@v1
       with:

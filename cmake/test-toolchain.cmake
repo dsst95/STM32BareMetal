@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS                 ${CPP_FLAGS})
 
 set(CMAKE_C_COMPILER                clang-20)
 set(CMAKE_ASM_COMPILER              clang-20)
-set(CMAKE_CXX_COMPILER              clang++-20)
+set(CMAKE_CXX_COMPILER              clang-20)
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
