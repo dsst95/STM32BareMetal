@@ -21,8 +21,3 @@ target_compile_definitions(${test_target_name} PRIVATE ${core_defines})
 
 include(GoogleTest)
 gtest_discover_tests(${test_target_name})
-
-add_custom_command(
-  TARGET ${test_target_name} POST_BUILD
-  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${PROJECT_NAME}Tests.elf
-)
