@@ -38,6 +38,14 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "MinSizeRel"
             }
+        },
+        {
+            "name": "test",
+            "inherits": "default",
+            "toolchainFile": "${sourceDir}/cmake/test-toolchain.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Test"
+            }
         }
     ],
     "buildPresets": [
@@ -56,6 +64,10 @@
         {
             "name": "minSizeRel",
             "configurePreset": "minSizeRel"
+        },
+        {
+            "name": "test",
+            "configurePreset": "test"
         }
     ]
 }

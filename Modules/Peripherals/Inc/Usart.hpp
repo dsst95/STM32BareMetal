@@ -101,7 +101,8 @@ namespace Peripherals::Usart
       const uint32_t baudRate, const uint32_t clockInTicks)
     {
       auto clock = clockInTicks * 1000;
-      auto div = clock / (static_cast<float>(baudRate) * 16.0F);
+      // Div rounded to 4 decimal places more precision gets wrong fraction result
+      auto div = round(clock / (static_cast<float>(baudRate) * 16.0F) * 10000) / 10000;
       auto mantissa = truncf(div);
       auto fraction = static_cast<uint32_t>(ceilf((div - mantissa) * 16.0F)) % 16;
       auto carry = truncf(ceilf((div - mantissa) * 16.0F) / 16.0F);

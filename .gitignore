@@ -47,3 +47,4 @@ build.ninja
 # End of https://www.toptal.com/developers/gitignore/api/cmake,visualstudiocode,ninja
 
 build/
+!build/.clang-tidy

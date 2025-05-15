@@ -24,14 +24,4 @@
   "C_Cpp.inlayHints.referenceOperator.enabled": true,
   "C_Cpp.inlayHints.referenceOperator.showSpace": false,
   "C_Cpp.formatting": "clangFormat",
-  "files.associations": {
-    "stm32f103xb.h": "c",
-    "cstddef": "cpp",
-    "type_traits": "cpp",
-    "cstdint": "cpp",
-    "compare": "cpp",
-    "array": "cpp",
-    "vector": "cpp",
-    "span": "cpp"
-  },
 }
