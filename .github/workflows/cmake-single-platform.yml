@@ -49,7 +49,7 @@ jobs:
         version: '20.1.4'
 
     - name: Link clang++ version specific
-      run: ln -s clang++ clang++-20
+      run: ln -s -f clang++ clang++-20
       working-directory: ${{github.workspace}}/llvm/bin
 
     - name: Configure CMake
