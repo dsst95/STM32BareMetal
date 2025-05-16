@@ -55,7 +55,7 @@ jobs:
     - name: Setup path
       run: |
         echo "${{github.workspace}}/llvm/bin" >> $GITHUB_PATH
-        echo "/home/runner/gcc-arm-none-eabi-13.3.1-linux-x64" >> $GITHUB_PATH
+        echo "/home/runner/gcc-arm-none-eabi-13.3.1-linux-x64/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -81,7 +81,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{ matrix.config }}
 
     - name: Test
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}/test/Tests
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}/Tests
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest
