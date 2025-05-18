@@ -34,7 +34,7 @@ namespace Peripherals::Rcc
       ConfigureSysTick();
     }
 
-    public:
+   public:
     /// @brief Number of ticks per millisecond.
     static constexpr uint32_t Ticks = 72000;
 
@@ -61,6 +61,7 @@ namespace Peripherals::Rcc
 
       while ((GetSysTick() - start) < milliseconds)
       {
+        __NOP();
       }
     }
 

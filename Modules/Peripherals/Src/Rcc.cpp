@@ -17,6 +17,7 @@ void RccType::ConfigureClocks()
   RCC->CR |= RCC_CR_HSEON;
   while ((RCC->CR & RCC_CR_HSERDY) == 0)
   {
+    __NOP();
   }
 
   RCC->CFGR |= RCC_CFGR_PLLSRC;
@@ -24,6 +25,7 @@ void RccType::ConfigureClocks()
   RCC->CR |= RCC_CR_PLLON;
   while ((RCC->CR & RCC_CR_PLLRDY) == 0)
   {
+    __NOP();
   }
 
   FLASH->ACR &= ~FLASH_ACR_LATENCY;
@@ -32,8 +34,9 @@ void RccType::ConfigureClocks()
 
   RCC->CFGR &= ~RCC_CFGR_SW;
   RCC->CFGR |= RCC_CFGR_SW_PLL;
-  while ((RCC->CFGR & RCC_CFGR_SWS) == 0)
+  while ((RCC->CFGR & RCC_CFGR_SWS_PLL) == 0)
   {
+    __NOP();
   }
 
   RCC->CFGR &= ~RCC_CFGR_HPRE;
@@ -42,7 +45,6 @@ void RccType::ConfigureClocks()
   RCC->CFGR &= ~RCC_CFGR_PPRE2;
   RCC->CFGR &= ~RCC_CFGR_ADCPRE;
   RCC->CFGR |= RCC_CFGR_ADCPRE_1;
-
 }
 
 void RccType::ConfigureSysTick()
@@ -50,5 +52,6 @@ void RccType::ConfigureSysTick()
   SysTick->CTRL = 0x00UL;
   SysTick->LOAD = Ticks - 1;
   SysTick->VAL = 0x00UL;
-  SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_CLKSOURCE_Msk;
+  SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_CLKSOURCE_Msk;
+  SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 }

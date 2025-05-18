@@ -20,6 +20,8 @@
 #include <span>
 #include <utility>
 
+using RccType = Peripherals::Rcc::ResetAndClockControl;
+
 namespace Peripherals::Usart
 {
   /// @brief USART instance enumeration.
@@ -116,7 +118,49 @@ namespace Peripherals::Usart
     /// @param timeout Timeout for the transmission in milliseconds.
     /// @return Status of the transmission operation.
     template<class T, std::size_t N>
-    Peripherals::Status Transmit(const std::span<T, N>& data, const size_t timeout) const;
+    inline Peripherals::Status Transmit(const std::span<T, N>& data, const size_t timeout) const
+    {
+      const auto start = RccType::GetInstance().GetSysTick();
+      auto iter = data.begin();
+
+      // Send data until the end of the span or timeout is reached
+      while (iter != data.end())
+      {
+        if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
+        {
+          return Peripherals::Status::Error;
+        }
+
+        if ((peripheral->SR & USART_SR_TXE) == USART_SR_TXE)
+        {
+          peripheral->DR = *iter;
+          ++iter;
+        }
+        else if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
+        {
+          return Peripherals::Status::Timeout;
+        }
+      }
+
+      // Wait for transmission to complete
+      while (true)
+      {
+        if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
+        {
+          return Peripherals::Status::Error;
+        }
+
+        if ((peripheral->SR & USART_SR_TC) != USART_SR_TC)
+        {
+          return Peripherals::Status::Ok;
+        }
+
+        if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
+        {
+          return Peripherals::Status::Timeout;
+        }
+      }
+    }
   };
 }  // namespace Peripherals::Usart
 

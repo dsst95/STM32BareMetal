@@ -17,51 +17,6 @@
 using RccType = Peripherals::Rcc::ResetAndClockControl;
 using UsartType = Peripherals::Usart::UniversalSynchronousAsynchronousReceiverTransmitter;
 
-template<class T, std::size_t N>
-Peripherals::Status UsartType::Transmit(const std::span<T, N>& data, const size_t timeout) const
-{
-  const auto start = RccType::GetInstance().GetSysTick();
-  auto iter = data.begin();
-
-  // Send data until the end of the span or timeout is reached
-  while (iter != data.end())
-  {
-    if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
-    {
-      return Peripherals::Status::Error;
-    }
-
-    if ((peripheral->SR & USART_SR_TXE) == USART_SR_TXE)
-    {
-      peripheral->DR = *iter;
-      ++iter;
-    }
-    else if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
-    {
-      return Peripherals::Status::Timeout;
-    }
-  }
-
-  // Wait for transmission to complete
-  while (true)
-  {
-    if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
-    {
-      return Peripherals::Status::Error;
-    }
-
-    if ((peripheral->SR & USART_SR_TC) != USART_SR_TC)
-    {
-      return Peripherals::Status::Ok;
-    }
-
-    if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
-    {
-      return Peripherals::Status::Timeout;
-    }
-  }
-}
-
 void UsartType::ConfigureUsart() const
 {
   // Enable transmitter
@@ -69,15 +24,12 @@ void UsartType::ConfigureUsart() const
 
   peripheral->CR1 &= ~USART_CR1_M;
   peripheral->CR1 &= ~USART_CR1_PS;
-  peripheral->CR1 |= USART_CR1_PCE;
+  peripheral->CR1 &= ~USART_CR1_PCE;
 
   // Disable interrupts
   peripheral->CR1 &= ~(USART_CR1_PEIE | USART_CR1_TXEIE | USART_CR1_TCIE | USART_CR1_RXNEIE | USART_CR1_IDLEIE);
   peripheral->CR2 &= ~USART_CR2_LBDIE;
   peripheral->CR3 &= ~(USART_CR3_CTSIE | USART_CR3_EIE);
-
-  // Disable receiver
-  peripheral->CR1 &= ~USART_CR1_RE;
 
   // Send no break character
   peripheral->CR1 &= ~USART_CR1_SBK;
@@ -94,6 +46,7 @@ void UsartType::ConfigureUsart() const
   peripheral->CR2 |= USART_CR2_CPOL | USART_CR2_CPHA | USART_CR2_LBCL;
 
   // Configure Baud Rate
+  peripheral->BRR = 0;
   peripheral->BRR |= fraction << USART_BRR_DIV_Fraction_Pos;
   peripheral->BRR |= mantissa << USART_BRR_DIV_Mantissa_Pos;
 
