@@ -28,11 +28,7 @@ namespace Peripherals::Rcc
 
     /// @brief Constructor for the ResetAndClockControl class.
     /// @details Configures the system clocks and the SysTickTimer.
-    inline ResetAndClockControl() : sysTick {0}
-    {
-      ConfigureClocks();
-      ConfigureSysTick();
-    }
+    ResetAndClockControl();
 
    public:
     /// @brief Number of ticks per millisecond.
@@ -55,15 +51,7 @@ namespace Peripherals::Rcc
 
     /// @brief Delays execution for a specified number of milliseconds.
     /// @param milliseconds Number of milliseconds to delay.
-    inline void Delay(const uint32_t milliseconds) const
-    {
-      const auto start = GetSysTick();
-
-      while ((GetSysTick() - start) < milliseconds)
-      {
-        __NOP();
-      }
-    }
+    void Delay(const uint32_t milliseconds) const;
 
     /// @brief Gets the current SysTick counter value.
     /// @return Current SysTick counter value.

@@ -8,6 +8,22 @@
 
 using RccType = Peripherals::Rcc::ResetAndClockControl;
 
+RccType::ResetAndClockControl() : sysTick {0}
+{
+  ConfigureClocks();
+  ConfigureSysTick();
+}
+
+void RccType::Delay(const uint32_t milliseconds) const
+{
+  const auto start = GetSysTick();
+
+  while ((GetSysTick() - start) < milliseconds)
+  {
+    __NOP();
+  }
+}
+
 void RccType::ConfigureClocks()
 {
   RCC->CFGR &= ~RCC_CFGR_PLLMULL;

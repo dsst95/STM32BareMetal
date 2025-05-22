@@ -17,6 +17,61 @@
 using RccType = Peripherals::Rcc::ResetAndClockControl;
 using UsartType = Peripherals::Usart::UniversalSynchronousAsynchronousReceiverTransmitter;
 
+void UsartType::Configure(USART_TypeDef* peripheral, const std::pair<size_t, size_t> mantissaFraction)
+{
+  this->peripheral = peripheral;
+  this->mantissa = mantissaFraction.first;
+  this->fraction = mantissaFraction.second;
+
+  ConfigureClocks();
+  ConfigureUsart();
+}
+
+template<class T, std::size_t N>
+Peripherals::Status UsartType::Transmit(const std::span<T, N>& data, const size_t timeout) const
+{
+  const auto start = RccType::GetInstance().GetSysTick();
+  auto iter = data.begin();
+
+  // Send data until the end of the span or timeout is reached
+  while (iter != data.end())
+  {
+    if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
+    {
+      return Peripherals::Status::Error;
+    }
+
+    if ((peripheral->SR & USART_SR_TXE) == USART_SR_TXE)
+    {
+      peripheral->DR = *iter;
+      ++iter;
+    }
+    else if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
+    {
+      return Peripherals::Status::Timeout;
+    }
+  }
+
+  // Wait for transmission to complete
+  while (true)
+  {
+    if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
+    {
+      return Peripherals::Status::Error;
+    }
+
+    if ((peripheral->SR & USART_SR_TC) != USART_SR_TC)
+    {
+      return Peripherals::Status::Ok;
+    }
+
+    if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
+    {
+      return Peripherals::Status::Timeout;
+    }
+  }
+}
+
 void UsartType::ConfigureUsart() const
 {
   // Enable transmitter
@@ -68,3 +123,6 @@ void UsartType::ConfigureClocks() const
     AFIO->MAPR &= ~AFIO_MAPR_USART1_REMAP;
   }
 }
+
+template
+Peripherals::Status UsartType::Transmit(const std::span<const char, std::numeric_limits<size_t>::max()>& data, const size_t timeout) const;

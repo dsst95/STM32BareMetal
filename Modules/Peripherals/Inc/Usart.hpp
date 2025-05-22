@@ -75,15 +75,7 @@ namespace Peripherals::Usart
     /// @brief Configures the USART peripheral with specified baud rate settings.
     /// @param peripheral Pointer to the USART peripheral.
     /// @param mantissaFraction Pair containing the mantissa and fraction for the baud rate.
-    void Configure(USART_TypeDef* peripheral, const std::pair<size_t, size_t> mantissaFraction)
-    {
-      this->peripheral = peripheral;
-      this->mantissa = mantissaFraction.first;
-      this->fraction = mantissaFraction.second;
-
-      ConfigureClocks();
-      ConfigureUsart();
-    }
+    void Configure(USART_TypeDef* peripheral, const std::pair<size_t, size_t> mantissaFraction);
 
     // Deleted constructor and assignment operator.
     UniversalSynchronousAsynchronousReceiverTransmitter(
@@ -113,54 +105,13 @@ namespace Peripherals::Usart
       return {mantissaWithCarry, fraction};
     }
 
+    // TODO: Move to a separate file
     /// @brief Transmits data over the USART peripheral.
     /// @param data Data to transmit.
     /// @param timeout Timeout for the transmission in milliseconds.
     /// @return Status of the transmission operation.
     template<class T, std::size_t N>
-    inline Peripherals::Status Transmit(const std::span<T, N>& data, const size_t timeout) const
-    {
-      const auto start = RccType::GetInstance().GetSysTick();
-      auto iter = data.begin();
-
-      // Send data until the end of the span or timeout is reached
-      while (iter != data.end())
-      {
-        if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
-        {
-          return Peripherals::Status::Error;
-        }
-
-        if ((peripheral->SR & USART_SR_TXE) == USART_SR_TXE)
-        {
-          peripheral->DR = *iter;
-          ++iter;
-        }
-        else if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
-        {
-          return Peripherals::Status::Timeout;
-        }
-      }
-
-      // Wait for transmission to complete
-      while (true)
-      {
-        if ((peripheral->SR & (USART_SR_PE | USART_SR_FE | USART_SR_NE | USART_SR_ORE)) != 0)
-        {
-          return Peripherals::Status::Error;
-        }
-
-        if ((peripheral->SR & USART_SR_TC) != USART_SR_TC)
-        {
-          return Peripherals::Status::Ok;
-        }
-
-        if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
-        {
-          return Peripherals::Status::Timeout;
-        }
-      }
-    }
+    Peripherals::Status Transmit(const std::span<T, N>& data, const size_t timeout) const;
   };
 }  // namespace Peripherals::Usart
 
