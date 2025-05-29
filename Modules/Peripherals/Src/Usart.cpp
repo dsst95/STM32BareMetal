@@ -43,7 +43,7 @@ Peripherals::Status UsartType::Transmit(const std::span<T, N>& data, const size_
 
     if ((peripheral->SR & USART_SR_TXE) == USART_SR_TXE)
     {
-      peripheral->DR = *iter;
+      peripheral->DR = static_cast<unsigned char>(*iter);
       ++iter;
     }
     else if ((RccType::GetInstance().GetSysTick() - start) >= timeout)
