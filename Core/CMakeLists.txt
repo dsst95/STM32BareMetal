@@ -105,6 +105,7 @@ target_compile_options(${target_name} PRIVATE
   -ffunction-sections
   -fdata-sections
   -fno-use-cxa-atexit
+  -save-temps
 
   # -Wno-volatile
   # -Wold-style-cast
