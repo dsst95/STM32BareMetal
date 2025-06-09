@@ -29,6 +29,8 @@ file(GLOB_RECURSE core_sources
 
 set(core_include_dirs
   ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Peripherals/Inc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Modules/TM1637
+  ${CMAKE_CURRENT_SOURCE_DIR}/Modules/Tasks
   ${CMAKE_CURRENT_SOURCE_DIR}/Libs/CMSIS/Inc
   ${CMAKE_CURRENT_SOURCE_DIR}/Libs/STM32/Inc
 )

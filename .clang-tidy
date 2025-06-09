@@ -24,7 +24,8 @@ Checks: >
   -cppcoreguidelines-pro-type-cstyle-cast,
   -modernize-use-std-print,
   -cppcoreguidelines-pro-type-vararg,
-  -hicpp-vararg
+  -hicpp-vararg,
+  -cppcoreguidelines-pro-bounds-constant-array-index
 
 WarningsAsErrors: "*"
 HeaderFileExtensions:         ['','h','hh','hpp','hxx']
