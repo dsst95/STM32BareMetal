@@ -29,6 +29,9 @@ namespace Peripherals
     static void SetupNvicPriorities()
     {
       NVIC_SetPriority(IRQn_Type::SysTick_IRQn, 0);
+      NVIC_SetPriority(IRQn_Type::EXTI0_IRQn, 5);
+
+      NVIC_EnableIRQ(IRQn_Type::EXTI0_IRQn);
     }
   };
 }  // namespace Peripherals

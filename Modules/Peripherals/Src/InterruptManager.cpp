@@ -6,6 +6,7 @@
 
 #include <stm32f1xx.h>
 
+#include <Exti.hpp>
 #include <InterruptManager.hpp>
 #include <Rcc.hpp>
 
@@ -16,5 +17,10 @@ using RccType = Peripherals::Rcc::ResetAndClockControl;
 extern "C" void SysTick_Handler()
 {
   RccType::GetInstance().HandleInterrupt();
+}
+
+extern "C" void EXTI0_IRQHandler()
+{
+  Peripherals::Exti::ExternalInterruptManager::HandleExti0Interrupt();
 }
 // NOLINTEND

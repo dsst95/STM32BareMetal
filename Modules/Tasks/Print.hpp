@@ -2,6 +2,7 @@
 #include <Rcc.hpp>
 #include <TM1637.hpp>
 #include <Usart.hpp>
+#include <Exti.hpp>
 #include <cstdio>
 
 #ifndef TASKS_PRINT_HPP
@@ -36,6 +37,8 @@ namespace Tasks::Print
     {
       UsartType::GetInstance<Usart::UsartInstance::Usart1>().Configure(
         USART1, UsartType::GetMantissaAndFraction(BaudRate, RccType::Ticks));
+
+      Peripherals::Exti::ExternalInterruptManager::SetupExti0Interrupt(Peripherals::Exti::ExtiPort::PortA);
     }
 
     // Deleted copy constructor and assignment operator.
@@ -48,10 +51,11 @@ namespace Tasks::Print
     /// @brief Runs the print task.
     void Run()
     {
-      if (pushButton.GetState())
-      {
-        printf("Hello World!\n");
-      }
+      // Done by exti
+      // if (pushButton.GetState())
+      // {
+      //   printf("Hello World!\n");
+      // }
     }
   };
 }  // namespace Tasks::Print
